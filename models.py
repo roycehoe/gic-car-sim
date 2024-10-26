@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum, IntEnum, StrEnum, auto
+from enum import Enum, StrEnum, auto
 from typing import Optional
 
 
@@ -12,9 +12,14 @@ class SimulationInterfaceState(Enum):
     SHOW_ALL_CAR_STATES_AND_ADD_CAR_OR_RUN_SIMULATION_MESSAGE = auto()
 
 
-class AddCarOrRunSimulationSelection(IntEnum):
-    ADD_CAR_TO_FIELD = 1
-    RUN_SIMULATION = 2
+class AddCarOrRunSimulationSelection(StrEnum):
+    ADD_CAR_TO_FIELD = "1"
+    RUN_SIMULATION = "2"
+
+
+class PostSimulationSelection(StrEnum):
+    START_OVER = "1"
+    EXIT = "2"
 
 
 class Direction(StrEnum):

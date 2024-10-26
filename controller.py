@@ -25,7 +25,7 @@ USER_INPUT_TO_COMMAND_MAP: dict[str, Command] = {
 
 
 def get_field(simulation_dimensions_input: str) -> Field:
-    parsed_user_input = simulation_dimensions_input.split("")
+    parsed_user_input = simulation_dimensions_input.split(" ")
     return Field(width=int(parsed_user_input[0]), height=int(parsed_user_input[1]))
 
 
@@ -41,10 +41,14 @@ def create_car(
     for command_input in commands_input:
         if parsed_command := USER_INPUT_TO_COMMAND_MAP.get(command_input):
             commands.append(parsed_command)
+            continue
         raise Exception
 
     return Car(
-        name=car_name_input, position=car_position, direction=car_direction, commands=[]
+        name=car_name_input,
+        position=car_position,
+        direction=car_direction,
+        commands=commands,
     )
 
 
