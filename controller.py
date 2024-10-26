@@ -67,7 +67,11 @@ def get_new_car_position(direction: Direction, position: Position):
         return Position(position.x - 1, position.y)
 
 
-def apply_command_to_car(command: Command, car: Car):
+def _is_car_out_of_bounds(field: Position, car_position: Position):
+    return car_position.x > field.x or car_position.y > field.y
+
+
+def apply_command_to_car(command: Command, car: Car, field: Position):
     if is_orientating_car(command):
         next_orientation_map = COMMAND_TO_ORIENTATION_TO_NEXT_ORIENTATION_MAP.get(
             command
@@ -79,6 +83,8 @@ def apply_command_to_car(command: Command, car: Car):
             raise Exception
         car.direction = next_direction
     else:
-        car.position = get_new_car_position(car.direction, car.position)
+        new_car_position = get_new_car_position(car.direction, car.position)
+        if not _is_car_out_of_bounds(field, new_car_position):
+            car.position = get_new_car_position(car.direction, car.position)
 
     car.commands.append(command)
