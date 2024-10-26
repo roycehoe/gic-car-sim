@@ -1,4 +1,4 @@
-from models import AddCarOrRunSimulationSelection, Car, Direction, Field, Position
+from models import AddCarOrRunSimulationSelection, Car, Coordinates, Direction
 from view import (
     PROMPT_SET_NAME_OF_CAR_MESSAGE,
     PROMPT_SET_SIMULATION_DIMENSIONS_MESSAGE,
@@ -8,21 +8,23 @@ from view import (
 )
 
 
-def get_field(simulation_dimensions_input: str):
+def get_field(simulation_dimensions_input: str) -> Coordinates:
     parsed_user_input = simulation_dimensions_input.split("")
-    return Field(width=int(parsed_user_input[0]), height=int(parsed_user_input[1]))
+    return Coordinates(
+        width=int(parsed_user_input[0]), height=int(parsed_user_input[1])
+    )
 
 
 def main():
     mock_car = Car(
         name="placeholder_name",
-        position=Position(x=0, y=0),
+        position=Coordinates(x=0, y=0),
         direction=Direction.NORTH,
         commands=["L", "L", "R"],
     )
     mock_post_simulation_car = Car(
         name="placeholder_name",
-        position=Position(x=0, y=0),
+        position=Coordinates(x=0, y=0),
         direction=Direction.NORTH,
         commands=["L", "L", "R"],
     )

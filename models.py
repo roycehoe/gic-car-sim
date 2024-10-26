@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, IntEnum, StrEnum, auto
+from typing import Optional
 
 
 class SimulationInterfaceState(Enum):
@@ -23,7 +24,7 @@ class Direction(StrEnum):
     WEST = "W"
 
 
-class Commands(StrEnum):
+class Command(StrEnum):
     FORWARD = "F"
     RIGHT = "R"
     LEFT = "L"
@@ -46,4 +47,16 @@ class Car:
     name: str  # Note: Name must be unique
     position: Position
     direction: Direction
-    commands: list[Commands]
+    commands: list[Command]
+
+
+@dataclass
+class App:
+    cars: list[Car]
+    field: Optional[Field] = None
+
+    def add_car(self, car: Car):
+        self.cars.append(car)
+
+    def set_field(self, field: Field):
+        self.field = field
