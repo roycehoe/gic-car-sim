@@ -36,15 +36,16 @@ class Command(StrEnum):
 
 
 @dataclass
-class Field:
-    width: int
-    height: int
-
-
-@dataclass
 class Position:
     x: int
     y: int
+
+
+@dataclass
+class CollisionStatistics:
+    other_car_name: str
+    position: Position
+    step: int
 
 
 @dataclass
@@ -53,15 +54,16 @@ class Car:
     position: Position
     direction: Direction
     commands: list[Command]
+    collision_statistics: Optional[CollisionStatistics] = None
 
 
 @dataclass
 class App:
     cars: list[Car]
-    field: Optional[Field] = None
+    field: Optional[Position] = None
 
     def add_car(self, car: Car):
         self.cars.append(car)
 
-    def set_field(self, field: Field):
+    def set_field(self, field: Position):
         self.field = field

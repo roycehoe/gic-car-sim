@@ -1,4 +1,4 @@
-from models import Car, Command, Direction, Field, Position
+from models import Car, CollisionStatistics, Command, Direction, Field, Position
 
 COMMAND_TO_ORIENTATION_TO_NEXT_ORIENTATION_MAP: dict[
     Command, dict[Direction, Direction]
@@ -88,3 +88,23 @@ def apply_command_to_car(command: Command, car: Car, field: Position):
             car.position = get_new_car_position(car.direction, car.position)
 
     car.commands.append(command)
+
+
+def set_collided_cars(cars: list[Car], step: int) -> None:
+    index: dict[Position, list[Car]] = {}
+    for car in cars:
+        if car.position not in index:
+            index[car.position] = []
+        index[car.position].append(car)
+
+    for position, cars_at_position in index.items():
+        if len(cars_at_position) == 1:
+            continue
+        # We shall assume only 2 cars can collide at once
+        first_car, second_car = cars_at_position
+        first_car.collision_statistics = CollisionStatistics(
+            other_car_name=second_car.name, position=position, step=step
+        )
+        second_car.collision_statistics = CollisionStatistics(
+            other_car_name=first_car.name, position=position, step=step
+        )

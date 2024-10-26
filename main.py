@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from controller import apply_command_to_car, create_car, get_field
+from controller import apply_command_to_car, create_car, get_field, set_collided_cars
 from models import AddCarOrRunSimulationSelection, Car, PostSimulationSelection
 from view import (
     PROMPT_SET_NAME_OF_CAR_MESSAGE,
@@ -40,16 +40,23 @@ def main():
             new_car = create_car(
                 car_name_input, car_initial_position_input, car_commands_input
             )
-            print(car_commands_input)
             cars.append(new_car)
 
         post_simulation_cars = [deepcopy(car) for car in cars]
-        command_count = len(cars[0].commands)
+        longest_command_count = max([len(car.commands) for car in cars])
+
         for post_simulation_car in post_simulation_cars:
-            for command_index in range(command_count):
+            for command_index in range(longest_command_count):
+                if command_index > len(post_simulation_car.commands):
+                    continue
+                if post_simulation_car.collision_statistics is not None:
+                    continue
                 apply_command_to_car(
-                    post_simulation_car.commands[command_index], post_simulation_car
+                    post_simulation_car.commands[command_index],
+                    post_simulation_car,
+                    field,
                 )
+                set_collided_cars(post_simulation_cars, command_index)
 
         post_simulation_input = input(
             get_prompt_post_simulation(cars, post_simulation_cars)
