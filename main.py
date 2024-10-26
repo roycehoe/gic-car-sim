@@ -56,18 +56,13 @@ class Car:
     direction: Direction
     commands: list[Commands]
 
-    def __str__(self):
-        return f"- {self.name}, ({self.position.x}, {self.position.y}) {self.direction}, {[command for command in self.commands]}"
+
+def get_pre_simulation_car_view(car: Car) -> str:
+    return f"- {car.name}, ({car.position.x}, {car.position.y}) {car.direction}, {[command for command in car.commands]}"
 
 
-@dataclass
-class PostSimulationCar:
-    name: str  # Note: Name must be unique
-    position: Position
-    direction: Direction
-
-    def __str__(self):
-        return f"- {self.name}, ({self.position.x}, {self.position.y}) {self.direction}"
+def get_post_simulation_car_view(car: Car) -> str:
+    return f"- {car.name}, ({car.position.x}, {car.position.y}) {car.direction}"
 
 
 class AddCarOrRunSimulationSelection(IntEnum):
@@ -101,7 +96,7 @@ def get_prompt_car_commands(car_name: str):
 
 
 def get_prompt_post_simulation_selection(
-    cars: list[Car], post_simulation_cars: list[PostSimulationCar]
+    cars: list[Car], post_simulation_cars: list[Car]
 ):
     return f"""Your current list of cars are:
 {[car for car in cars]}
