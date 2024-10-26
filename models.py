@@ -19,8 +19,8 @@ class AddCarOrRunSimulationSelection(IntEnum):
 
 class Direction(StrEnum):
     NORTH = "N"
-    SOUTH = "S"
     EAST = "E"
+    SOUTH = "S"
     WEST = "W"
 
 

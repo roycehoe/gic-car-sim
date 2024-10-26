@@ -1,38 +1,25 @@
-from models import AddCarOrRunSimulationSelection, Car, Coordinates, Direction
+from controller import create_car, get_field
+from models import AddCarOrRunSimulationSelection
 from view import (
     PROMPT_SET_NAME_OF_CAR_MESSAGE,
     PROMPT_SET_SIMULATION_DIMENSIONS_MESSAGE,
     get_prompt_car_commands,
     get_prompt_car_initial_position,
-    get_prompt_post_simulation_selection,
+    get_prompt_pre_simulation,
 )
 
 
-def get_field(simulation_dimensions_input: str) -> Coordinates:
-    parsed_user_input = simulation_dimensions_input.split("")
-    return Coordinates(
-        width=int(parsed_user_input[0]), height=int(parsed_user_input[1])
-    )
-
-
 def main():
-    mock_car = Car(
-        name="placeholder_name",
-        position=Coordinates(x=0, y=0),
-        direction=Direction.NORTH,
-        commands=["L", "L", "R"],
-    )
-    mock_post_simulation_car = Car(
-        name="placeholder_name",
-        position=Coordinates(x=0, y=0),
-        direction=Direction.NORTH,
-        commands=["L", "L", "R"],
-    )
+    cars = []
+    post_simulation_cars = []
+    field = None
 
     simulation_dimensions_input = input(PROMPT_SET_SIMULATION_DIMENSIONS_MESSAGE)
     field = get_field(simulation_dimensions_input)
 
-    add_car_or_run_simulation_input = input(get_prompt_post_init_field_selection(field))
+    add_car_or_run_simulation_input = input(
+        get_prompt_pre_simulation(field, cars, post_simulation_cars)
+    )
     if (
         add_car_or_run_simulation_input
         == AddCarOrRunSimulationSelection.ADD_CAR_TO_FIELD
@@ -41,12 +28,9 @@ def main():
         car_initial_position_input = input(
             get_prompt_car_initial_position(car_name_input)
         )
-    elif (
-        add_car_or_run_simulation_input == AddCarOrRunSimulationSelection.RUN_SIMULATION
-    ):
-        ...
-    else:
-        raise Exception
+        car_commands_input = input(get_prompt_car_commands(car_name_input))
 
-    car_commands = get_prompt_car_commands(mock_car.name)
-    get_prompt_post_simulation_selection([mock_car], [mock_post_simulation_car])
+        new_car = create_car(
+            car_name_input, car_initial_position_input, car_commands_input
+        )
+        cars.append(new_car)
