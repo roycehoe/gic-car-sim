@@ -24,9 +24,6 @@ class SimulationInterfaceState(Enum):
     SHOW_ALL_CAR_STATES_AND_ADD_CAR_OR_RUN_SIMULATION_MESSAGE = auto()
 
 
-class Simulation: ...
-
-
 class Direction(StrEnum):
     NORTH = "N"
     SOUTH = "S"
@@ -87,23 +84,25 @@ def get_field_message(field: Field):
     return f"You have created a field of {field.width} x {field.height}"
 
 
-def get_post_init_field_message(field: Field):
+def get_prompt_post_init_field_selection(field: Field):
     return f"""{get_field_message(field)}
 
      {PROMPT_ADD_CAR_OR_RUN_SIMULATION_MESSAGE}"""
 
 
-def get_car_initial_position(car_name: str):
+def get_prompt_car_initial_position(car_name: str):
     return (
         f"""Please enter initial position of car {car_name} in x y Direction format:"""
     )
 
 
-def get_car_commands_mesage(car_name: str):
+def get_prompt_car_commands(car_name: str):
     return f"""Please enter the commands for car {car_name}"""
 
 
-def get_post_simulation_message(cars: list[Car], post_simulation_cars: list[Car]):
+def get_prompt_post_simulation_selection(
+    cars: list[Car], post_simulation_cars: list[PostSimulationCar]
+):
     return f"""Your current list of cars are:
 {[car for car in cars]}
 
@@ -123,16 +122,24 @@ def main():
         direction=Direction.NORTH,
         commands=["L", "L", "R"],
     )
+    mock_post_simulation_car = PostSimulationCar(
+        name="placeholder_name",
+        position=Position(x=0, y=0),
+        direction=Direction.NORTH,
+    )
 
     simulation_dimensions_input = input(PROMPT_SET_SIMULATION_DIMENSIONS_MESSAGE)
     field = get_field(simulation_dimensions_input)
-    add_car_or_run_simulation_input = input(get_post_init_field_message(field))
+
+    add_car_or_run_simulation_input = input(get_prompt_post_init_field_selection(field))
     if (
         add_car_or_run_simulation_input
         == AddCarOrRunSimulationSelection.ADD_CAR_TO_FIELD
     ):
         car_name_input = input(PROMPT_SET_NAME_OF_CAR_MESSAGE)
-        car_initial_position_input = input(get_car_initial_position(car_name_input))
+        car_initial_position_input = input(
+            get_prompt_car_initial_position(car_name_input)
+        )
     elif (
         add_car_or_run_simulation_input == AddCarOrRunSimulationSelection.RUN_SIMULATION
     ):
@@ -140,4 +147,5 @@ def main():
     else:
         raise Exception
 
-    car_commands = get_car_commands_mesage(mock_car.name)
+    car_commands = get_prompt_car_commands(mock_car.name)
+    get_prompt_post_simulation_selection([mock_car], [mock_post_simulation_car])
