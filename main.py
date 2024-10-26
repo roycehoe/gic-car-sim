@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum, IntEnum, auto
+from enum import Enum, IntEnum, StrEnum, auto
 
 PROMPT_SET_SIMULATION_DIMENSIONS_MESSAGE = """Welcome to Auto Driving Car Simulation!
 
@@ -27,7 +27,17 @@ class SimulationInterfaceState(Enum):
 class Simulation: ...
 
 
-class Direction(Enum):
+class Direction(StrEnum):
+    NORTH = "N"
+    SOUTH = "S"
+    EAST = "E"
+    WEST = "W"
+
+
+class Commands(StrEnum):
+    FORWARD = "F"
+    RIGHT = "R"
+    LEFT = "L"
 
 
 @dataclass
@@ -35,19 +45,32 @@ class Field:
     width: int
     height: int
 
+
 @dataclass
 class Position:
     x: int
     y: int
 
 
-
 @dataclass
 class Car:
-    name: str # Note: Name must be unique
-    stating_position: Position
+    name: str  # Note: Name must be unique
+    position: Position
+    direction: Direction
+    commands: list[Commands]
+
+    def __str__(self):
+        return f"- {self.name}, ({self.position.x}, {self.position.y}) {self.direction}, {[command for command in self.commands]}"
+
+
+@dataclass
+class PostSimulationCar:
+    name: str  # Note: Name must be unique
+    position: Position
     direction: Direction
 
+    def __str__(self):
+        return f"- {self.name}, ({self.position.x}, {self.position.y}) {self.direction}"
 
 
 class AddCarOrRunSimulationSelection(IntEnum):
@@ -76,7 +99,31 @@ def get_car_initial_position(car_name: str):
     )
 
 
+def get_car_commands_mesage(car_name: str):
+    return f"""Please enter the commands for car {car_name}"""
+
+
+def get_post_simulation_message(cars: list[Car], post_simulation_cars: list[Car]):
+    return f"""Your current list of cars are:
+{[car for car in cars]}
+
+After simulation, the result is:
+{[post_simulation_car for post_simulation_car in post_simulation_cars]}
+
+Please choose from the following options:
+[1] Start over
+[2] Exit
+"""
+
+
 def main():
+    mock_car = Car(
+        name="placeholder_name",
+        position=Position(x=0, y=0),
+        direction=Direction.NORTH,
+        commands=["L", "L", "R"],
+    )
+
     simulation_dimensions_input = input(PROMPT_SET_SIMULATION_DIMENSIONS_MESSAGE)
     field = get_field(simulation_dimensions_input)
     add_car_or_run_simulation_input = input(get_post_init_field_message(field))
@@ -92,3 +139,5 @@ def main():
         ...
     else:
         raise Exception
+
+    car_commands = get_car_commands_mesage(mock_car.name)
