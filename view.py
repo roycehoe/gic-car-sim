@@ -17,7 +17,7 @@ PROMPT_START_OVER_OR_EXIT_MESSAGE = """Please choose from the following options:
 
 
 def _get_pre_simulation_car_view(car: Car) -> str:
-    return f"- {car.name}, ({car.position.x}, {car.position.y}) {car.direction}, {[command for command in car.commands]}"
+    return f"- {car.name}, ({car.position.x}, {car.position.y}) {car.direction}, {''.join([command for command in car.commands])}"
 
 
 def _get_post_simulation_car_view(car: Car) -> str:
@@ -25,13 +25,15 @@ def _get_post_simulation_car_view(car: Car) -> str:
 
 
 def _get_current_cars_view(cars: list[Car]) -> str:
+    new_line = "\n"
     return f"""Your current list of cars are:
-{[_get_pre_simulation_car_view(car) for car in cars]}"""
+{new_line.join([_get_pre_simulation_car_view(car) for car in cars])}"""
 
 
 def _get_post_simulation_cars_view(post_simulation_cars: list[Car]) -> str:
+    new_line = "\n"
     return f"""After simulation, the result is:
-{[_get_post_simulation_car_view(post_simulation_car) for post_simulation_car in post_simulation_cars]}
+{new_line.join([_get_post_simulation_car_view(post_simulation_car) for post_simulation_car in post_simulation_cars])}
     """
 
 
