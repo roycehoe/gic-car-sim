@@ -1,14 +1,7 @@
-from dataclasses import dataclass
-from enum import Enum, IntEnum, StrEnum, auto
-
+from models import AddCarOrRunSimulationSelection, Car, Direction, Field, Position
 from view import (
     PROMPT_SET_NAME_OF_CAR_MESSAGE,
     PROMPT_SET_SIMULATION_DIMENSIONS_MESSAGE,
-    AddCarOrRunSimulationSelection,
-    Car,
-    Direction,
-    Field,
-    Position,
     get_prompt_car_commands,
     get_prompt_car_initial_position,
     get_prompt_post_simulation_selection,
