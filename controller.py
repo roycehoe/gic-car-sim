@@ -73,9 +73,11 @@ def _is_car_out_of_bounds(field: Position, car_position: Position):
     if car_position.y < 0:
         return True
 
-    if car_position.x > field.x:
+    # For an [a] x [b] field, the maximum upper right coordinate is
+    # [a-1] x [b-1] due to boundary inclusion in a zero based system
+    if car_position.x >= field.x - 1:
         return True
-    if car_position.y > field.y:
+    if car_position.y >= field.y - 1:
         return True
 
     return False
