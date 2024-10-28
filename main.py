@@ -65,10 +65,6 @@ def main():
         )
         if post_simulation_input == PostSimulationSelection.EXIT:
             exit()
-        if post_simulation_input == PostSimulationSelection.START_OVER:
-            cars: list[Car] = []
-            post_simulation_cars: list[Car] = []
-            field = None
 
 
 main()
