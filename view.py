@@ -22,7 +22,7 @@ def _get_pre_simulation_car_view(car: Car) -> str:
 
 def _get_post_simulation_car_view(car: Car) -> str:
     if car.collision_statistics:
-        return f"- {car.name}, collides with {car.collision_statistics.other_car_name} at ({car.collision_statistics.position.x},{car.collision_statistics.position.x}) at step {car.collision_statistics.step}"
+        return f"- {car.name}, collides with {car.collision_statistics.other_car_name} at ({car.collision_statistics.position.x},{car.collision_statistics.position.y}) at step {car.collision_statistics.step}"
     return f"- {car.name}, ({car.position.x}, {car.position.y}) {car.direction}"
 
 

@@ -55,9 +55,7 @@ def main():
                     post_simulation_car,
                     field,
                 )
-            # set_collided_cars(post_simulation_cars, command_index)
-
-        # print(post_simulation_cars)
+            set_collided_cars(post_simulation_cars, command_index)
 
         post_simulation_input = input(
             get_prompt_post_simulation(cars, post_simulation_cars)
