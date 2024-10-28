@@ -44,9 +44,8 @@ def main():
 
         post_simulation_cars = [deepcopy(car) for car in cars]
         longest_command_count = max([len(car.commands) for car in cars])
-
-        for post_simulation_car in post_simulation_cars:
-            for command_index in range(longest_command_count):
+        for command_index in range(longest_command_count):
+            for post_simulation_car in post_simulation_cars:
                 if command_index > len(post_simulation_car.commands):
                     continue
                 if post_simulation_car.collision_statistics is not None:
@@ -56,7 +55,9 @@ def main():
                     post_simulation_car,
                     field,
                 )
-                set_collided_cars(post_simulation_cars, command_index)
+            # set_collided_cars(post_simulation_cars, command_index)
+
+        # print(post_simulation_cars)
 
         post_simulation_input = input(
             get_prompt_post_simulation(cars, post_simulation_cars)

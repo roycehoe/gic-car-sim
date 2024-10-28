@@ -41,7 +41,7 @@ def _get_post_simulation_cars_view(post_simulation_cars: list[Car]) -> str:
 
 def _get_prompt_pre_simulation_header(field: Position, cars: list[Car]) -> str:
     if not cars:
-        return f"You have created a field of {field.width} x {field.height}"
+        return f"You have created a field of {field.x} x {field.y}"
     return f"{_get_current_cars_view(cars)}"
 
 

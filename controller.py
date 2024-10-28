@@ -1,4 +1,4 @@
-from models import Car, CollisionStatistics, Command, Direction, Field, Position
+from models import Car, CollisionStatistics, Command, Direction, Position
 
 COMMAND_TO_ORIENTATION_TO_NEXT_ORIENTATION_MAP: dict[
     Command, dict[Direction, Direction]
@@ -24,9 +24,9 @@ USER_INPUT_TO_COMMAND_MAP: dict[str, Command] = {
 }
 
 
-def get_field(simulation_dimensions_input: str) -> Field:
+def get_field(simulation_dimensions_input: str) -> Position:
     parsed_user_input = simulation_dimensions_input.split(" ")
-    return Field(width=int(parsed_user_input[0]), height=int(parsed_user_input[1]))
+    return Position(x=int(parsed_user_input[0]), y=int(parsed_user_input[1]))
 
 
 def create_car(
@@ -68,7 +68,17 @@ def get_new_car_position(direction: Direction, position: Position):
 
 
 def _is_car_out_of_bounds(field: Position, car_position: Position):
-    return car_position.x > field.x or car_position.y > field.y
+    if car_position.x < 0:
+        return True
+    if car_position.y < 0:
+        return True
+
+    if car_position.x > field.x:
+        return True
+    if car_position.y > field.y:
+        return True
+
+    return False
 
 
 def apply_command_to_car(command: Command, car: Car, field: Position):
@@ -85,14 +95,19 @@ def apply_command_to_car(command: Command, car: Car, field: Position):
     else:
         new_car_position = get_new_car_position(car.direction, car.position)
         if not _is_car_out_of_bounds(field, new_car_position):
-            car.position = get_new_car_position(car.direction, car.position)
+            car.position = new_car_position
 
     car.commands.append(command)
 
 
 def set_collided_cars(cars: list[Car], step: int) -> None:
     index: dict[Position, list[Car]] = {}
-    for car in cars:
+    non_collided_cars = [
+        non_collided_car
+        for non_collided_car in cars
+        if non_collided_car.collision_statistics is None
+    ]
+    for car in non_collided_cars:
         if car.position not in index:
             index[car.position] = []
         index[car.position].append(car)
@@ -100,7 +115,6 @@ def set_collided_cars(cars: list[Car], step: int) -> None:
     for position, cars_at_position in index.items():
         if len(cars_at_position) == 1:
             continue
-        # We shall assume only 2 cars can collide at once
         first_car, second_car = cars_at_position
         first_car.collision_statistics = CollisionStatistics(
             other_car_name=second_car.name, position=position, step=step

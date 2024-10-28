@@ -35,7 +35,7 @@ class Command(StrEnum):
     LEFT = "L"
 
 
-@dataclass
+@dataclass(frozen=True)
 class Position:
     x: int
     y: int
@@ -55,15 +55,3 @@ class Car:
     direction: Direction
     commands: list[Command]
     collision_statistics: Optional[CollisionStatistics] = None
-
-
-@dataclass
-class App:
-    cars: list[Car]
-    field: Optional[Position] = None
-
-    def add_car(self, car: Car):
-        self.cars.append(car)
-
-    def set_field(self, field: Position):
-        self.field = field
