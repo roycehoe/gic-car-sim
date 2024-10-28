@@ -35,8 +35,7 @@ def _get_current_cars_view(cars: list[Car]) -> str:
 def _get_post_simulation_cars_view(post_simulation_cars: list[Car]) -> str:
     new_line = "\n"
     return f"""After simulation, the result is:
-{new_line.join([_get_post_simulation_car_view(post_simulation_car) for post_simulation_car in post_simulation_cars])}
-    """
+{new_line.join([_get_post_simulation_car_view(post_simulation_car) for post_simulation_car in post_simulation_cars])}"""
 
 
 def _get_prompt_pre_simulation_header(field: Position, cars: list[Car]) -> str:

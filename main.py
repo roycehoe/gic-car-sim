@@ -55,13 +55,20 @@ def main():
                     post_simulation_car,
                     field,
                 )
-            set_collided_cars(post_simulation_cars, command_index)
+            # offsets the fact that command_index is zero indexed
+            step = command_index + 1
+
+            set_collided_cars(post_simulation_cars, step)
 
         post_simulation_input = input(
             get_prompt_post_simulation(cars, post_simulation_cars)
         )
         if post_simulation_input == PostSimulationSelection.EXIT:
             exit()
+        if post_simulation_input == PostSimulationSelection.START_OVER:
+            cars: list[Car] = []
+            post_simulation_cars: list[Car] = []
+            field = None
 
 
 main()
