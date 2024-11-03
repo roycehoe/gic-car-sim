@@ -135,6 +135,8 @@ def get_post_simulation_cars(cars: list[Car], field: Position):
                 continue
             if post_simulation_car.collision_statistics is not None:
                 continue
+            if command_index >= len(post_simulation_car.commands):
+                continue
             apply_command_to_car(
                 post_simulation_car.commands[command_index],
                 post_simulation_car,
