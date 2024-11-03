@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from models import Car, CollisionStatistics, Command, Direction, Position
 
 COMMAND_TO_ORIENTATION_TO_NEXT_ORIENTATION_MAP: dict[
@@ -124,3 +126,25 @@ def set_collided_cars(cars: list[Car], step: int) -> None:
         second_car.collision_statistics = CollisionStatistics(
             other_car_name=first_car.name, position=position, step=step
         )
+
+
+def get_post_simulation_cars(cars: list[Car], field: Position):
+    post_simulation_cars = [deepcopy(car) for car in cars]
+    longest_command_count = max([len(car.commands) for car in cars])
+    for command_index in range(longest_command_count):
+        for post_simulation_car in post_simulation_cars:
+            if command_index > len(post_simulation_car.commands):
+                continue
+            if post_simulation_car.collision_statistics is not None:
+                continue
+            apply_command_to_car(
+                post_simulation_car.commands[command_index],
+                post_simulation_car,
+                field,
+            )
+        # offsets the fact that command_index is zero indexed
+        step = command_index + 1
+
+        set_collided_cars(post_simulation_cars, step)
+
+    return post_simulation_cars
