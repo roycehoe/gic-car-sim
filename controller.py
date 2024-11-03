@@ -101,8 +101,6 @@ def apply_command_to_car(command: Command, car: Car, field: Position):
         if not _is_car_out_of_bounds(field, new_car_position):
             car.position = new_car_position
 
-    car.commands.append(command)
-
 
 def set_collided_cars(cars: list[Car], step: int) -> None:
     index: dict[Position, list[Car]] = {}
